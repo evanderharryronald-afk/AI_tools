@@ -34,7 +34,7 @@ pip install -r ../../requirements.txt
 4. Run the tool (example for merge_py):
 
 ```bash
-python merge_tool_relative.py
+python merge_tool_cli.py
 ```
 
 ## Contributing

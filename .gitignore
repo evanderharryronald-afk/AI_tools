@@ -1,0 +1,61 @@
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+*.pdb
+
+# ===========================
+# Virtual Environments
+# ===========================
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ===========================
+# Distribution / Packaging
+# ===========================
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+*.tar.gz
+*.zip
+
+# ===========================
+# IDEs and Editors
+# ===========================
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# ===========================
+# OS generated files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Logs and temporary files
+# ===========================
+*.log
+*.tmp
+*.bak
+*.swp
+
+# ===========================
+# Tkinter / GUI temp files
+# ===========================
+*.py~
