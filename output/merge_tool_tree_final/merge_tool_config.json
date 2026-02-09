@@ -1,0 +1,13 @@
+{
+  "ignore_rules": {
+    ".git": true,
+    "__pycache__": true,
+    ".venv": true,
+    "*.pyc": true,
+    "*.pyo": true,
+    ".postman": true,
+    ".venv1": true,
+    ".vscode": true,
+    ".idea": true
+  }
+}
