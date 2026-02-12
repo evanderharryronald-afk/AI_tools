@@ -5,7 +5,9 @@ import fnmatch
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from tkinterdnd2 import TkinterDnD
-
+from core.file_engine import merge_files_with_relative_paths
+from core.git_engine import get_git_diff
+from core.prompt_builder import PromptBuilder
 # =================== Config ===================
 CONFIG_PATH = "merge_tool_config.json"
 
@@ -23,15 +25,6 @@ SUPPORTED_EXTS = {".py", ".md", ".txt"}
 
 
 # =================== Helper ===================
-def merge_files_with_relative_paths(files, root_dir):
-    merged_code = []
-    for file in files:
-        rel = os.path.relpath(file, root_dir).replace("\\", "/")
-        merged_code.append(f"# ===== File: {rel} =====\n")
-        with open(file, "r", encoding="utf-8", errors="ignore") as f:
-            merged_code.append(f.read().rstrip() + "\n\n")
-    return merged_code
-
 
 def save_merged_code(merged_code):
     save_path = filedialog.asksaveasfilename(
@@ -203,6 +196,21 @@ class MergeToolTreeApp:
         tk.Button(bottom, text="Merge Now",
                   command=self.merge_now,
                   bg="#673AB7", fg="white").pack(side="right", padx=5)
+
+        self.mode_var = tk.StringVar(value="Explain")
+
+        mode_menu = ttk.Combobox(
+            bottom,
+            textvariable=self.mode_var,
+            values=["Debug", "Refactor", "Explain"],
+            state="readonly",
+            width=12
+        )
+        mode_menu.pack(side="right", padx=5)
+
+        tk.Button(bottom, text="Generate AI Prompt",
+                  command=self.generate_ai_prompt,
+                  bg="#009688", fg="white").pack(side="right", padx=5)
 
     # ================= Config =================
     def load_config(self):
@@ -880,6 +888,56 @@ class MergeToolTreeApp:
                                    f"Check console for detailed debug information.")
 
         return event.action
+
+    def generate_ai_prompt(self):
+        if not self.root_dir or not self.selected_files:
+            messagebox.showwarning("Warning", "Root directory or files not selected.")
+            return
+
+        # 合并文件
+        merged_code = merge_files_with_relative_paths(
+            self.selected_files,
+            self.root_dir
+        )
+
+        # 获取 diff
+        git_diff = get_git_diff(self.root_dir)
+
+        # 获取模式
+        mode = self.mode_var.get()
+
+        # 简单弹窗输入用户问题
+        user_instruction = tk.simpledialog.askstring(
+            "User Instruction",
+            "Enter your question or requirement:"
+        )
+
+        builder = PromptBuilder()
+        prompt = builder.build(mode, merged_code, git_diff, user_instruction or "")
+
+        # 显示结果
+        self.show_prompt_window(prompt)
+
+    def show_prompt_window(self, prompt):
+        win = tk.Toplevel(self.root)
+        win.title("Generated AI Prompt")
+        win.geometry("900x700")
+
+        text = tk.Text(win, wrap="word")
+        text.pack(fill="both", expand=True)
+        text.insert("1.0", prompt)
+
+        btn_frame = tk.Frame(win)
+        btn_frame.pack(fill="x")
+
+        tk.Button(btn_frame, text="Copy to Clipboard",
+                  command=lambda: self.copy_to_clipboard(prompt)
+                  ).pack(side="right", padx=5, pady=5)
+
+    def copy_to_clipboard(self, text):
+        self.root.clipboard_clear()
+        self.root.clipboard_append(text)
+        messagebox.showinfo("Copied", "Prompt copied to clipboard.")
 
 
 # =================== Run ===================
