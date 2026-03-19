@@ -1,4 +1,26 @@
-# AI_tools/merge_py/merge_tool_tree_final.py
+# AI_tools/merge_py/AI_ready_code_weaver_v1.py
+"""
+================================================================================
+PROJECT NAME: AI-Ready Code Weaver (v1.0 - Interactive Base)
+DESCRIPTION:
+    一个功能完备的代码合并工具基准版本。重点在于提供极致的本地交互体验，通过图形化界面
+    快速筛选、组合项目文件，以便后续发送给 AI 进行代码审计或功能开发。
+
+CORE FEATURES:
+    1.  [动态树形浏览]：实时扫描目录结构，支持文件夹展开/折叠及按需加载（Lazy Loading）。
+    2.  [高级过滤系统]：内置可滚动配置窗口，支持 fnmatch 通配符规则（如 .git, __pycache__），
+        规则修改后自动同步刷新目录树。
+    3.  [多维交互模式]：
+        - 支持 Ctrl/Shift 多选文件后批量添加。
+        - 支持从系统文件管理器直接拖拽文件进入列表。
+        - 支持在软件内部将树节点拖拽至合并列表。
+    4.  [持久化配置]：自动保存/加载过滤规则至 JSON 文件，减少重复设置。
+
+AUTHOR: Evander
+DATE: 2026-03-19
+VERSION: 1.0.0 - Stable Base
+================================================================================
+"""
 import os
 import json
 import fnmatch
